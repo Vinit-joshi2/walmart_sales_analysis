@@ -100,9 +100,17 @@ This project is an end-to-end data analysis solution designed to extract critica
 
 ## Results and Insights
 
-- **Sales Insights**: Key categories, branches with highest sales, and preferred payment methods.
-- **Profitability**: Insights into the most profitable product categories and locations.
-- **Customer Behavior**: Trends in ratings, payment preferences, and peak shopping hours.
+```
+select payment_method , sum(quantity) as quantity_sold from walmart_clean_data
+group by 1
+
+```
+
+- Credit Card is the most preferred payment method with 9,567 transactions, indicating strong customer trust in card-based payments.
+
+- E-Wallet follows closely with 8,932 transactions, showing the growing adoption of digital payment solutions.
+
+- Cash was used in only 4,984 transactions, suggesting that traditional payment methods are being phased out in favor of more convenient, cashless options.
 
 
 ---
