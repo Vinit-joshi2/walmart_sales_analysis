@@ -105,6 +105,7 @@ select payment_method , sum(quantity) as quantity_sold from walmart_clean_data
 group by 1
 
 ```
+<img src = "https://github.com/Vinit-joshi2/walmart_sales_analysis/blob/main/patment_method.png">
 
 - Credit Card is the most preferred payment method with 9,567 transactions, indicating strong customer trust in card-based payments.
 
