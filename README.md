@@ -100,7 +100,7 @@ This project is an end-to-end data analysis solution designed to extract critica
 
 ## Results and Insights
 
-<h3> Q. 4 
+<h3> Q. 1
  Calculate the total quantity of items sold per payment method. List payment_method and total_quantity.
 </h3>
 
@@ -116,6 +116,102 @@ group by 1
 - E-Wallet follows closely with 8,932 transactions, showing the growing adoption of digital payment solutions.
 
 - Cash was used in only 4,984 transactions, suggesting that traditional payment methods are being phased out in favor of more convenient, cashless options.
+
+<h3>  Q.2
+ Calculate the total profit for each category by considering total_profit as
+(unit_price * quantity * profit_margin). 
+List category and total_profit, ordered from highest to lowest profit.
+
+</h3>
+
+```
+select category , sum(total * profit_margin) as total_profit
+from walmart_clean_data
+group by 1
+order by 1 , 2 desc
+```
+
+<img src = "https://github.com/Vinit-joshi2/walmart_sales_analysis/blob/main/category.png">
+
+- Fashion Accessories and Home & Lifestyle are the top-performing categories, generating sales of $192,314.89 and $192,213.64 respectively. These two categories dominate the revenue landscape, indicating strong customer interest and demand.
+
+- Sports and Travel ranks third with $20,613.81 in total sales, followed closely by Food and Beverages at $21,552.86, suggesting moderate performance in these categories.
+
+- Electronic Accessories and Health & Beauty show relatively lower sales at $30,772.49 and $18,671.73, indicating potential areas for growth through targeted marketing or product bundling.
+
+
+
+<h3>  Q.9 Identify 5 branch with highest decrese ratio in 
+revevenue compare to last year(current year 2023 and last year 2022)
+rdr == last_rev-cr_rev/ls_rev*100
+
+</h3>
+
+```
+-- 2022 sales
+with  revenue_2022
+AS
+(
+	SELECT 
+		branch,
+		SUM(total) as revenue
+	FROM walmart_clean_data
+	WHERE EXTRACT(YEAR FROM TO_DATE(date, 'DD/MM/YY')) = 2022 -- psql
+	-- WHERE YEAR(TO_DATE(date, 'DD/MM/YY')) = 2022 -- mysql
+	GROUP BY 1
+),
+
+revenue_2023
+AS
+(
+
+	SELECT 
+		branch,
+		SUM(total) as revenue
+	FROM walmart_clean_data
+	WHERE EXTRACT(YEAR FROM TO_DATE(date, 'DD/MM/YY')) = 2023
+	GROUP BY 1
+)
+
+SELECT 
+	ls.branch,
+	ls.revenue as last_year_revenue,
+	cs.revenue as cr_year_revenue,
+	ROUND(
+		(ls.revenue - cs.revenue)::numeric/
+		ls.revenue::numeric * 100, 
+		2) as rev_dec_ratio
+FROM revenue_2022 as ls
+JOIN
+revenue_2023 as cs
+ON ls.branch = cs.branch
+WHERE 
+	ls.revenue > cs.revenue
+ORDER BY 4 DESC
+LIMIT 5
+
+
+```
+
+<img src = "https://github.com/Vinit-joshi2/walmart_sales_analysis/blob/main/revenue_by_year.png">
+
+
+<h4>   
+A comparison of revenues across Walmart branches between 2022 and 2023 reveals a significant decline in earnings:
+</h4>
+
+| Branch  | 2022 Revenue | 2023 Revenue | Decrease (%)  |
+| ------- | ------------ | ------------ | ------------- |
+| WALM045 | 1,731        | 647          | **62.62%** ⬇️ |
+| WALM047 | 2,581        | 1,069        | **58.58%** ⬇️ |
+| WALM098 | 2,446        | 1,030        | **57.89%** ⬇️ |
+| WALM033 | 2,099        | 931          | **55.65%** ⬇️ |
+| WALM081 | 1,723        | 850          | **50.67%** ⬇️ |
+
+- All listed branches experienced a revenue drop of over 50%, with WALM045 seeing the steepest decline of 62.62%.
+
+- This sharp drop may be attributed to factors like reduced footfall, competition, stock issues, or pricing strategy mismatches.
+
 
 
 ---
