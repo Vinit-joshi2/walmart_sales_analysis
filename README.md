@@ -100,6 +100,10 @@ This project is an end-to-end data analysis solution designed to extract critica
 
 ## Results and Insights
 
+<h3> Q. 4 
+ Calculate the total quantity of items sold per payment method. List payment_method and total_quantity.
+</h3>
+
 ```
 select payment_method , sum(quantity) as quantity_sold from walmart_clean_data
 group by 1
